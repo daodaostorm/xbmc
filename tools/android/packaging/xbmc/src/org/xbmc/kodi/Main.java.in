@@ -12,6 +12,7 @@ import android.widget.RelativeLayout;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.os.Handler;
+import com.umeng.analytics.MobclickAgent;
 import org.xbmc.@APP_NAME_LC@.XBMCVideoView;
 
 public class Main extends NativeActivity
@@ -171,6 +172,13 @@ public class Main extends NativeActivity
               | View.SYSTEM_UI_FLAG_FULLSCREEN
               | API_SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
     }
+    MobclickAgent.onResume(this);
+  }
+
+  @Override
+  public void onPause() {
+    super.onPause();
+    MobclickAgent.onPause(this);
   }
 
   @Override

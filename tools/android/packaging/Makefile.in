@@ -122,6 +122,7 @@ libs: $(PREFIX)/lib/@APP_NAME_LC@/lib@APP_NAME_LC@.so
 	rm -rf xbmc/lib/$(CPU) xbmc/libs/$(CPU) xbmc/obj/local/$(CPU)
 	mkdir -p xbmc/lib/$(CPU) xbmc/assets/python2.6/lib/ xbmc/libs/$(CPU) xbmc/obj/local/$(CPU)
 	cp -fp $(SRCLIBS) xbmc/obj/local/$(CPU)/
+	cp -fp $(XBMCROOT)/media/umeng-analytics-v5.6.4.jar xbmc/obj
 	cp -fp $(PREFIX)/lib/@APP_NAME_LC@/lib@APP_NAME_LC@.so xbmc/obj/local/$(CPU)/
 	find $(PREFIX)/lib/@APP_NAME_LC@/addons -name "*.so" -exec cp -fp {} xbmc/obj/local/$(CPU)/ \;
 	find $(PREFIX)/share/@APP_NAME_LC@/addons -name "*.so" -exec cp -fp {} xbmc/obj/local/$(CPU)/ \;
@@ -135,11 +136,12 @@ libs: $(PREFIX)/lib/@APP_NAME_LC@/lib@APP_NAME_LC@.so
 	echo "directory $(TOOLCHAIN)/sysroot/usr/include $(NDKROOT)/sources/android/native_app_glue" \
 	     "$(NDKROOT)/sources/cxx-stl/gnu-libstdc++/$(GCC_VERSION)/include $(XBMCROOT)  $(PREFIX)/include jni" >> ./xbmc/libs/$(CPU)/gdb.setup
 	cp -fp xbmc/libs/$(CPU)/* xbmc/lib/$(CPU)
+	cp -fp $(XBMCROOT)/media/umeng-analytics-v5.6.4.jar xbmc/lib/
 
 xbmc/classes.dex: res
 	mkdir -p xbmc/obj
-	@javac -classpath $(SDKROOT)/platforms/$(SDK_PLATFORM)/android.jar:xbmc/obj -d xbmc/obj -sourcepath xbmc/src xbmc/src/*.java
-	@javac -classpath $(SDKROOT)/platforms/$(SDK_PLATFORM)/android.jar:xbmc/obj -d xbmc/obj -sourcepath xbmc/src xbmc/src/org/xbmc/@APP_NAME_LC@/*.java
+	@javac -classpath xbmc/lib/umeng-analytics-v5.6.4.jar:$(SDKROOT)/platforms/$(SDK_PLATFORM)/android.jar:xbmc/obj -d xbmc/obj -sourcepath xbmc/src xbmc/src/*.java
+	@javac -classpath xbmc/lib/umeng-analytics-v5.6.4.jar:$(SDKROOT)/platforms/$(SDK_PLATFORM)/android.jar:xbmc/obj -d xbmc/obj -sourcepath xbmc/src xbmc/src/org/xbmc/@APP_NAME_LC@/*.java
 	@$(DX) --dex --output=xbmc/classes.dex xbmc/obj
 
 package: libs symbols python xbmc/classes.dex
